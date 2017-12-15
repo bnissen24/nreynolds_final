@@ -5,34 +5,28 @@ require("../model/todo_db.php");
 
 $action = filter_input(INPUT_POST, 'action');
 if ($action == NULL) {
-	$action = filter_input(INPUT_POST, 'action');
+	$action = filter_input(INPUT_GET, 'action');
 	if ($action == NULL) {
-		$action = 'init_user';
+		$action = 'signup';
 	}
 }
 
-if ($action == 'init_user') {
-	$fname = filter_input(INPUT_POST, 'fname',
-		FILTER_VALIDATE_INT);
-	$lname = filter_input(INPUT_POST, 'lname',
-		FILTER_VALIDATE_INT);
-	$email = filter_input(INPUT_POST, 'email',
-		FILTER_VALIDATE_INT);
-	$phone = filter_input(INPUT_POST, 'phone',
-		FILTER_VALIDATE_INT);
-	$birthday = filter_input(INPUT_POST, 'bday',
-		FILTER_VALIDATE_INT);
-	$password = filter_input(INPUT_POST, 'password',
-		FILTER_VALIDATE_INT);
-	$gender = filter_input(INPUT_POST, 'gender',
-		FILTER_VALIDATE_INT);
-	$id = '';
+if ($action == 'signup') {
+	include('signup.php');
+} else if ($action == 'login') {
+	include('login.php');
+} else if ($action == 'init_user') {
+	$fname = filter_input(INPUT_POST, 'fname');
+	$lname = filter_input(INPUT_POST, 'lname');
+	$email = filter_input(INPUT_POST, 'email');
+	$phone = filter_input(INPUT_POST, 'phone');
+	$birthday = filter_input(INPUT_POST, 'bday');
+	$password = filter_input(INPUT_POST, 'password');
+	$gender = filter_input(INPUT_POST, 'gender');
 
-	add_user($id, $email, $fname, $lname, $phone, $birthday, $gender, $password);
-	header("Location: todo_list.php");
-}
-
-if ($action == 'login') {
+	add_user($email, $fname, $lname, $phone, $birthday, $gender, $password);
+	header("Location: .?action=todo_list");
+} else if ($action == 'login') {
 	$email = filter_input(INPUT_POST, 'email',
 		FILTER_VALIDATE_INT);
 	$password = filter_input(INPUT_POST, 'password',
@@ -40,13 +34,11 @@ if ($action == 'login') {
 	foreach ($users as $user){
 		if ($user['email'] == $email){
 			if ($user['password'] == $password){
-				header("Location: todo_list.php");
+				header("Location: .?action=todo_list");
 			}
 		}
 	}
-}
-
-if ($action == 'todo_list') {
+} else if ($action == 'todo_list') {
 	$name = get_name($email);
 	$users = get_user($email);
 	$todos = get_todos($email);

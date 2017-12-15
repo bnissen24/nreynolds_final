@@ -3,7 +3,7 @@
 function add_user($email, $fname, $lname, $phone, $birthday, $gender, $password) {
 	global $db;
 	$query = 'INSERT INTO accounts
-			  (id, email, fname, lname, phone, birthday, gender, password)
+			  (email, fname, lname, phone, birthday, gender, password)
 			  VALUES
 			  (:email, :fname, :lname, :phone, :birthday, :gender, :password)';
 	$statement = $db->prepare($query);
